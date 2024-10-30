@@ -1,10 +1,10 @@
 <script setup>
+import BaseNavigation from '@/components/BaseNavigation.vue';
 import { RouterView } from 'vue-router';
-import Navigation from '@/components/Navigation.vue'
 </script>
 <template>
-  <div class="flex flex-col min-h-screen font-Roboto bg-weather-primary">
-    <Navigation />
+  <div class="flex min-h-screen flex-col bg-weather-primary font-Roboto">
+    <BaseNavigation />
     <RouterView />
   </div>
 </template>

@@ -1,6 +1,8 @@
-import js from '@eslint/js'
-import pluginVue from 'eslint-plugin-vue'
-import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+import js from '@eslint/js';
+import eslintConfigPrettier from '@vue/eslint-config-prettier';
+import tailwind from 'eslint-plugin-tailwindcss';
+import pluginVue from 'eslint-plugin-vue';
+import globals from 'globals';
 
 export default [
   {
@@ -13,7 +15,34 @@ export default [
     ignores: ['**/dist/**', '**/dist-ssr/**', '**/coverage/**'],
   },
 
+  {
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+      },
+    },
+  },
+
   js.configs.recommended,
   ...pluginVue.configs['flat/essential'],
-  skipFormatting,
-]
+  { plugins: { eslintConfigPrettier } },
+  ...tailwind.configs['flat/recommended'],
+
+  {
+    rules: {
+      'tailwindcss/no-custom-classname': [
+        'warn',
+        {
+          whitelist: [
+            'fa-solid',
+            'fa-plus',
+            'fa-sun',
+            'fa-circle-info',
+            'fa-moon',
+            'fa-cloud'
+          ],
+        },
+      ],
+    },
+  },
+];
