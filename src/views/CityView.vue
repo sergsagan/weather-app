@@ -1,14 +1,12 @@
 <script setup>
-import AsyncCityView from '@/components/AsyncCityView.vue';
+import AsyncCityWeather from '@/components/AsyncCityWeather.vue';
 </script>
 
 <template>
   <suspense>
-    <AsyncCityView />
+    <AsyncCityWeather />
     <template #fallback>
-      <p>Loading...</p>
+      <p class="text-center text-white">Loading...</p>
     </template>
   </suspense>
 </template>
-
-<style scoped></style>
