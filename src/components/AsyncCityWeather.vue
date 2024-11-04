@@ -1,9 +1,10 @@
 <script setup>
 import { getWeatherData } from '@/api.js';
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
+const router = useRouter();
 const weatherData = ref(null);
 const error = ref(null);
 
@@ -11,12 +12,10 @@ const fetchWeatherData = async () => {
   try {
     const data = await getWeatherData(route.query.lat, route.query.lng, '3.0');
 
-    // Обчислення поточного часу
     const localOffset = new Date().getTimezoneOffset() * 60000;
     const utc = data.current.dt * 1000 + localOffset;
     data.currentTime = utc + 1000 * data.timezone_offset;
 
-    // Обчислення часу для кожної години в прогнозі
     data.hourly.forEach((hour) => {
       const utc = hour.dt * 1000 + localOffset;
       hour.currentTime = utc + 1000 * data.timezone_offset;
@@ -31,6 +30,15 @@ const fetchWeatherData = async () => {
 onMounted(() => {
   fetchWeatherData();
 });
+
+const removeCity = () => {
+  const cities = JSON.parse(localStorage.getItem('savedCities'));
+  const updatedCities = cities.filter((city) => city.id !== route.query.id);
+  localStorage.setItem('savedCities', JSON.stringify(updatedCities));
+  router.push({
+    name: 'home',
+  });
+};
 </script>
 
 <template>
@@ -135,6 +143,15 @@ onMounted(() => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div
+        v-if="route.query.id"
+        class="flex cursor-pointer items-center justify-center gap-2 py-12 text-white duration-150 hover:text-red-500"
+        @click="removeCity"
+      >
+        <i class="fa-solid fa-trash"></i>
+        <p>Remove City</p>
       </div>
     </div>
   </div>

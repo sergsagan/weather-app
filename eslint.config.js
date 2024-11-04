@@ -39,7 +39,8 @@ export default [
             'fa-sun',
             'fa-circle-info',
             'fa-moon',
-            'fa-cloud'
+            'fa-cloud',
+            'fa-trash'
           ],
         },
       ],
