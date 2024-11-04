@@ -1,10 +1,9 @@
 <script setup>
-import axios from 'axios';
+import { searchCity } from '@/api';
+import CityList from '@/components/CityList.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const mapboxAPIKey =
-  'pk.eyJ1Ijoiam9obmtvbWFybmlja2kiLCJhIjoiY2t5NjFzODZvMHJkaDJ1bWx6OGVieGxreSJ9.IpojdT3U3NENknF6_WhR2Q';
 const searchQuery = ref('');
 const queryTimeout = ref(null);
 const mapboxSearchResults = ref(null);
@@ -29,18 +28,14 @@ const previewCity = (searchResult) => {
 };
 
 const getSearchResults = () => {
-  clearTimeout(searchQuery.value);
+  clearTimeout(queryTimeout.value);
   queryTimeout.value = setTimeout(async () => {
     if (searchQuery.value !== '') {
       try {
-        const result = await axios.get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchQuery.value}.json?access_token=${mapboxAPIKey}&types=place`,
-        );
-        mapboxSearchResults.value = result.data.features;
+        mapboxSearchResults.value = await searchCity(searchQuery.value);
       } catch {
         searchError.value = true;
       }
-
       return;
     }
     mapboxSearchResults.value = null;
@@ -64,7 +59,7 @@ const getSearchResults = () => {
       >
         <p v-if="searchError">Sorry, something went wrong, please try again</p>
         <p v-if="!searchError && mapboxSearchResults.length === 0">
-          No results math your query, try a different term.
+          No results match your query, try a different term.
         </p>
         <template v-else>
           <li
@@ -77,6 +72,14 @@ const getSearchResults = () => {
           </li>
         </template>
       </ul>
+    </div>
+    <div class="flex flex-col gap-4">
+      <Suspense>
+        <CityList />
+        <template #fallback>
+          <p>Loading...</p>
+        </template>
+      </Suspense>
     </div>
   </main>
 </template>

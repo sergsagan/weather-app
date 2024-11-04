@@ -9,7 +9,7 @@ const error = ref(null);
 
 const fetchWeatherData = async () => {
   try {
-    const data = await getWeatherData(route.query.lat, route.query.lng);
+    const data = await getWeatherData(route.query.lat, route.query.lng, '3.0');
 
     // Обчислення поточного часу
     const localOffset = new Date().getTimezoneOffset() * 60000;
