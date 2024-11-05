@@ -1,11 +1,10 @@
 <script setup>
-const props = defineProps({
+defineProps({
   city: {
     type: Object,
     default: () => {},
   },
 });
-console.log('city', props.city);
 </script>
 
 <template>
@@ -17,15 +16,15 @@ console.log('city', props.city);
       <h2 class="text-2xl">{{ city.city }}</h2>
       <h3>{{ city.state }}</h3>
     </div>
-    <div>
+    <div class="flex w-20 items-center justify-center">
       <img
-        class="h-auto w-[50px]"
+        class="size-20"
         :src="`https://openweathermap.org/img/wn/${city.weather.weather[0].icon}@2x.png`"
         alt="icon"
       />
     </div>
-    <div class="flex flex-col gap-2">
-      <p class="self-end text-2xl">{{ Math.round(city.weather.main.temp) }}&deg;</p>
+    <div class="flex w-20 flex-col items-end gap-2">
+      <p class="text-2xl">{{ Math.round(city.weather.main.temp) }}&deg;</p>
       <div class="flex gap-2">
         <span class="text-xs">H: {{ Math.round(city.weather.main.temp_max) }}&deg;</span>
         <span class="text-xs">L: {{ Math.round(city.weather.main.temp_min) }}&deg;</span>
